@@ -1,0 +1,858 @@
+# from PIL import Image
+
+from ._anvil_designer import Form1Template
+from anvil import *
+import anvil.google.auth, anvil.google.drive
+from anvil.google.drive import app_files
+import anvil.server
+import anvil.media
+import time 
+
+class Form1(Form1Template):
+  month_val = ''
+  bool_flag = True
+  explain_flag = True
+  month_flag = False
+  key = 0
+  bool_entry_point = True
+  bool_mult_month = False
+  bool_link = True
+
+  def __init__(self, **properties):
+    # Set Form properties and Data Bindings.
+    self.init_components(**properties)
+    
+#     self.overlay_image.source = app_files.overlay_jpg    
+    self.assault.source = app_files.assault_jpg
+    self.theft.source = app_files.theft_jpg    
+    self.violent.source = app_files.violent_jpg 
+    self.street.source = app_files.val2_jpg
+    self.home.source = app_files.val_jpg
+    self.campus.source = app_files.feb21assault_jpg
+    self.river.source = app_files.a1_jpg
+    self.rose.source = app_files.t1_jpg
+    self.keyes.source = app_files.v1_jpg
+    self.overlay_tracker = [app_files.theft_jpg,app_files.assault_jpg,app_files.violent_jpg]
+    self.tva_dict = {1:[app_files.theft_jpg,app_files.assault_jpg,app_files.violent_jpg], 2:[app_files.val_jpg,app_files.feb21assault_jpg,app_files.val2_jpg],3:[app_files.t1_jpg,app_files.a1_jpg,app_files.v1_jpg]}
+    self.overlay_counter = 0
+#     self.current = app_files.violent_jpg   
+    
+    # Any code you write here will run when the form opens.
+
+  #ACTIVE
+  
+  def invisible(self):
+    self.theft.visible = False  
+    self.assault.visible = False
+    self.violent.visible = False
+    self.overlay_image.visible = False
+    self.error_btn.visible = False
+    self.error_msg.visible = False
+    self.explain_msg.visible = False
+    self.campus.visible = False
+    self.street.visible = False
+    self.home.visible = False  
+    self.overlay_month.visible = False
+    self.river.visible = False
+    self.rose.visible = False
+    self.keyes.visible = False
+    
+    
+  def warning_message(self, **event_args):
+    self.warning.visible = True
+    self.icon.visible = True
+  
+  def warning_message_2(self, **event_args):
+    self.warning_2.visible = True
+    self.icon_2.visible = True
+    
+  def disable_warning_message(self, **event_args):
+    self.warning.visible = False
+    self.icon.visible = False
+  
+  def disable_warning_message_2(self, **event_args):
+    self.warning_2.visible = False
+    self.icon_2.visible = False
+  def no_month_select(self):
+    if not self.check_box_1.checked and not self.check_box_2.checked and not self.check_box_3.checked and not self.check_box_4.checked  and not self.check_box_5.checked  and not self.check_box_6.checked  and not self.check_box_13.checked  and not self.check_box_8.checked  and not self.check_box_14.checked  and not self.check_box_10.checked and  not self.check_box_11.checked and  not self.check_box_15.checked: 
+        self.warning_message_2()
+        return True
+    return False
+  
+    
+  def multiple_option_selector(self):
+      print('b')
+    
+      if self.check_box_7.checked and self.check_box_9.checked and self.check_box_12.checked:
+        if self.no_month_select():
+          self.check_box_7.checked = False
+          return
+        self.overlay_image.source = anvil.server.call('overlay',self.overlay_tracker[0],self.overlay_tracker[1])
+        self.overlay_image.source = anvil.server.call('overlay',self.overlay_image.source,self.overlay_tracker[2])
+#         anvil.server.call('overlay',app_files.theft_jpg,app_files.assault_jpg)
+#         time.sleep(35)
+        self.overlay_image.visible = True
+        self.error_msg.visible = True
+        while not self.overlay_image.source:
+          self.overlay_image.source = anvil.server.call('overlay',self.overlay_tracker[0],self.overlay_tracker[1])
+          self.overlay_image.source = anvil.server.call('overlay',self.overlay_image,self.overlay_tracker[2])
+          self.error_btn.visible = True
+          print('7 & 9')
+      
+      elif self.check_box_12.checked and self.check_box_9.checked: #VIOLENT & ASSAULT
+        if self.no_month_select():
+          self.check_box_12.checked = False
+          return
+        self.overlay_image.source = anvil.server.call('overlay',self.overlay_tracker[2],self.overlay_tracker[1])
+#         time.sleep(35)
+        self.overlay_image.visible = True
+        self.error_msg.visible = True
+        while not self.overlay_image.source:
+#           self.overlay_image.source = anvil.server.call('overlay',app_files.assault_jpg,app_files.violent_jpg)
+          self.overlay_image.source = anvil.server.call('overlay',self.overlay_tracker[2],self.overlay_tracker[1])
+
+          self.error_btn.visible = True
+          print('12 & 9')
+        
+      elif self.check_box_12.checked and self.check_box_7.checked: #VIOLENT & THEFT
+        if self.no_month_select():
+          self.check_box_12.checked = False
+          return
+        self.overlay_image.source = anvil.server.call('overlay',self.overlay_tracker[0],self.overlay_tracker[2])
+#         time.sleep(35)
+        self.overlay_image.visible = True
+        self.error_msg.visible = True
+        while not self.overlay_image.source:
+          self.overlay_image.source = anvil.server.call('overlay',self.overlay_tracker[0],self.overlay_tracker[2])
+          self.error_btn.visible = True
+          print('12 & 7')
+        
+      elif self.check_box_7.checked and self.check_box_9.checked: #THEFT & ASSAULT
+        if self.no_month_select():
+          self.check_box_7.checked = False
+          return
+        self.overlay_image.source = anvil.server.call('overlay',self.overlay_tracker[0],self.overlay_tracker[1])
+#         anvil.server.call('overlay',app_files.theft_jpg,app_files.assault_jpg)
+#         time.sleep(35)
+        self.overlay_image.visible = True
+        self.error_msg.visible = True
+        while not self.overlay_image.source:
+          self.overlay_image.source = anvil.server.call('overlay',self.overlay_tracker[0],self.overlay_tracker[1])
+          self.error_btn.visible = True
+          print('7 & 9')
+      else:
+        pass
+    
+      #THEFT
+#     if self.check_box_7.checked and self.check_box_9.checked: 
+#       anvil.server.call('overlay',app_files.theft_jpg,app_files.assault_jpg)
+#     elif self.check_box_7.checked and self.check_box_12.checked: 
+#       anvil.server.call('overlay',app_files.theft_jpg,app_files.violent_jpg)
+#     elif self.check_box_9.checked and self.check_box_12.checked: 
+#       anvil.server.call('overlay',app_files.violent_jpg,app_files.assault_jpg)
+#     self.invisible()   
+#     self.overlay.visible = True
+    
+  def mult_month_checker(self):
+    if self.bool_mult_month:
+      self.bool_mult_month = False   
+      self.invisible()
+      self.overlay_image.visible = True
+      return True
+
+  def check_all(self,**event_args):
+    self.check_box_1_change()
+    self.check_box_2_change()
+    self.check_box_3_change()
+    self.check_box_4_change()
+    self.check_box_5_change()
+    self.check_box_6_change()
+    self.check_box_8_change()
+    self.check_box_10_change()
+    self.check_box_11_change()
+    self.check_box_13_change()
+    self.check_box_14_change()
+    self.check_box_15_change()
+    self.disable_warning_message()
+    self.multiple_option_selector()
+    
+    
+  def check_box_7_change(self, **event_args):
+    self.check_all()
+    
+#     self.current = app_files.theft_jpg
+    pass
+
+  def check_box_9_change(self, **event_args):
+    self.check_all()
+#     self.current = app_files.assault_jpg
+    pass
+
+  def check_box_12_change(self, **event_args):
+    self.check_all()
+#     self.current = app_files.violent_jpg
+    pass
+  
+  
+  def call_dict(self,month_dig):
+  
+    if self.check_box_12.checked and self.check_box_9.checked and self.check_box_7.checked: #IF ALL CHECKED
+      self.overlay_image.source = anvil.server.call('overlay',self.tva_dict[self.key][2],self.tva_dict[month_dig][1])
+      self.overlay_image.source = anvil.server.call('overlay',self.overlay_image.source,self.tva_dict[month_dig][0])
+      
+      self.overlay_image.visible = True
+      self.error_msg.visible = True
+      while not self.overlay_image.source:
+        self.overlay_image.source = anvil.server.call('overlay',self.tva_dict[self.key][2],self.tva_dict[month_dig][1])
+        self.overlay_image.source = anvil.server.call('overlay',self.overlay_image.source,self.tva_dict[month_dig][0])
+        self.error_btn.visible = True
+ 
+    elif self.check_box_7.checked and self.check_box_9.checked: #IF THEFT/ASSAULT CHECKED
+          self.overlay_image.source = anvil.server.call('overlay',self.tva_dict[self.key][0],self.tva_dict[month_dig][1])
+          self.overlay_image.visible = True
+          self.error_msg.visible = True
+          while not self.overlay_image.source:
+            self.overlay_image.source = anvil.server.call('overlay',self.tva_dict[self.key][0],self.tva_dict[month_dig][1])
+            self.error_btn.visible = True
+            
+    elif self.check_box_12.checked and self.check_box_9.checked: #IF ASSAULT/VIOLENT CHECKED
+      self.overlay_image.source = anvil.server.call('overlay',self.tva_dict[self.key][2],self.tva_dict[month_dig][1])
+      self.overlay_image.visible = True
+      self.error_msg.visible = True
+      while not self.overlay_image.source:
+        self.overlay_image.source = anvil.server.call('overlay',self.tva_dict[self.key][2],self.tva_dict[month_dig][1])
+        self.error_btn.visible = True
+        
+    elif self.check_box_12.checked and self.check_box_7.checked: #IF THEFT/VIOLENT CHECKED
+      self.overlay_image.source = anvil.server.call('overlay',self.tva_dict[self.key][2],self.tva_dict[month_dig][0])
+      self.overlay_image.visible = True
+      self.error_msg.visible = True
+      while not self.overlay_image.source:
+        self.overlay_image.source = anvil.server.call('overlay',self.tva_dict[self.key][2],self.tva_dict[month_dig][0])
+        self.error_btn.visible = True
+    
+    elif self.check_box_7.checked: #IF THEFT CHECKED
+          self.overlay_image.source = anvil.server.call('overlay',self.tva_dict[self.key][0],self.tva_dict[month_dig][0])
+          self.overlay_image.visible = True
+          self.error_msg.visible = True
+          while not self.overlay_image.source:
+            self.overlay_image.source = anvil.server.call('overlay',self.tva_dict[self.key][0],self.tva_dict[month_dig][0])
+            self.error_btn.visible = True
+        
+    elif self.check_box_9.checked: #IF ASSAULT CHECKED
+      self.overlay_image.source = anvil.server.call('overlay',self.tva_dict[self.key][1],self.tva_dict[month_dig][1])
+      self.overlay_image.visible = True
+      self.error_msg.visible = True
+      while not self.overlay_image.source:
+        self.overlay_image.source = anvil.server.call('overlay',self.tva_dict[self.key][1],self.tva_dict[month_dig][1])
+        self.error_btn.visible = True
+    
+    elif self.check_box_12.checked: #IF VIOLENT
+      self.overlay_image.source = anvil.server.call('overlay',self.tva_dict[self.key][2],self.tva_dict[month_dig][2])
+      self.overlay_image.visible = True
+      self.error_msg.visible = True
+      while not self.overlay_image.source:
+        self.overlay_image.source = anvil.server.call('overlay',self.tva_dict[self.key][2],self.tva_dict[month_dig][2])
+        self.error_btn.visible = True
+    
+    
+  def multiple_month_selector(self):
+    self.bool_mult_month = True    
+    self.invisible()
+    if self.check_box_1.checked: #IF JAN CHECKED
+      if self.key != 1:
+        self.call_dict(1)
+        self.key = 1
+        
+    if self.check_box_2.checked: #IF FEB CHECKED:
+      if self.key != 2:
+        self.call_dict(2)
+        self.key = 2        
+    
+    if self.check_box_3.checked: #IF MARCH CHECKED:
+      if self.key != 3:
+        self.call_dict(3)
+        self.key = 3
+    
+    
+#JAN
+  def check_box_1_change(self, **event_args):
+
+      
+    self.disable_warning_message_2()
+
+    if self.bool_entry_point:
+      self.key = 1
+      self.bool_entry_point = False
+    if not self.check_box_1.checked:
+      self.bool_entry_point = True
+      self.key = 1
+              
+    if self.key!= 1 and self.check_box_1.checked:
+      self.multiple_month_selector()
+    if not self.check_box_7.checked and not self.check_box_9.checked and not self.check_box_12.checked:
+      self.invisible()
+      self.warning_message()
+      self.check_box_1.checked = False
+      
+    elif self.check_box_1.checked and self.check_box_7.checked: #THEFT
+      self.invisible()
+      self.theft.visible = True
+      self.overlay_tracker[0] = app_files.theft_jpg
+      
+    elif self.check_box_1.checked and self.check_box_9.checked: #ASSAULT
+      self.invisible()      
+      self.assault.visible = True
+      self.overlay_tracker[1] = app_files.assault_jpg
+      
+    elif self.check_box_1.checked and self.check_box_12.checked: #SERIOUS CRIME
+      self.invisible()
+      self.violent.visible = True
+      self.overlay_tracker[2] = app_files.violent_jpg
+    else:
+      self.disable_warning_message()
+      self.invisible()
+    self.mult_month_checker()
+
+#FEB      
+  def check_box_2_change(self, **event_args):
+
+    self.disable_warning_message_2()
+    
+    if self.bool_entry_point:
+      self.key = 2
+      self.bool_entry_point = False
+    
+    if not self.check_box_2.checked:
+      self.bool_entry_point = True
+      self.key = 2
+      
+    if self.key != 2 and self.check_box_2.checked:
+      self.multiple_month_selector()
+    
+    if not self.check_box_7.checked and not self.check_box_9.checked and not self.check_box_12.checked:
+      self.invisible()
+      self.warning_message()
+      self.check_box_2.checked = False
+      
+    elif self.check_box_2.checked and self.check_box_7.checked: #THEFT
+      self.invisible()
+      print('A')
+      self.home.visible = True
+      self.overlay_tracker[0] = app_files.val_jpg
+      
+    elif self.check_box_2.checked and self.check_box_9.checked: #ASSAULT
+      self.invisible()      
+      self.campus.visible = True
+      self.overlay_tracker[1] = app_files.feb21assault_jpg
+      
+    elif self.check_box_2.checked and self.check_box_12.checked: #SERIOUS CRIME
+      self.invisible()
+      self.street.visible = True
+      self.overlay_tracker[2] = app_files.val2_jpg
+    else:
+      self.disable_warning_message()
+      self.invisible()
+    self.mult_month_checker()  
+ 
+#MARCH
+  def check_box_3_change(self, **event_args):
+
+    self.disable_warning_message_2()
+
+    if self.bool_entry_point:
+      self.key = 3
+      self.bool_entry_point = False
+    if not self.check_box_3.checked:
+      self.bool_entry_point = True
+      self.key = 3
+              
+    if self.key!= 3 and self.check_box_3.checked:
+      self.multiple_month_selector()
+      
+    if not self.check_box_7.checked and not self.check_box_9.checked and not self.check_box_12.checked:
+      self.invisible()
+      self.warning_message()
+      self.check_box_3.checked = False
+      
+    elif self.check_box_3.checked and self.check_box_7.checked: #THEFT
+      self.invisible()
+      self.rose.visible = True
+      self.overlay_tracker[0] = app_files.t1_jpg
+      
+    elif self.check_box_3.checked and self.check_box_9.checked: #ASSAULT
+      self.invisible()      
+      self.river.visible = True
+      self.overlay_tracker[1] = app_files.a1_jpg
+      
+    elif self.check_box_3.checked and self.check_box_12.checked: #SERIOUS CRIME
+      self.invisible()
+      self.keyes.visible = True
+      self.overlay_tracker[2] = app_files.v1_jpg
+    else:
+      self.disable_warning_message()
+      self.invisible()
+    self.mult_month_checker()
+
+  def check_box_4_change(self, **event_args):
+    if not self.check_box_7.checked and not self.check_box_9.checked and not self.check_box_12.checked:
+      self.invisible()
+      self.warning_message()
+      self.check_box_4.checked = False
+    elif self.check_box_4.checked and self.check_box_9.checked and self.check_box_7.checked and self.check_box_12:
+      print("7 & 9 & 12 SELECTED")
+    elif self.check_box_4.checked and self.check_box_9.checked and self.check_box_7.checked:
+      print("7 & 9 SELECTED")
+    elif self.check_box_4.checked and self.check_box_9.checked and self.check_box_12.checked:
+      print("9 & 12 SELECTED")
+    elif self.check_box_4.checked and self.check_box_7.checked and self.check_box_12.checked:
+      print("7 & 12 SELECTED")
+    elif self.check_box_4.checked and self.check_box_7.checked:
+      self.invisible()
+      self.street.visible = True
+    elif self.check_box_4.checked and self.check_box_9.checked:
+      self.invisible()
+      self.river.visible = True
+    elif self.check_box_4.checked and self.check_box_12.checked:
+      self.invisible()
+      self.home.visible = True
+    else:
+      self.disable_warning_message()
+      self.invisible()
+    pass
+
+  def check_box_5_change(self, **event_args):
+    if not self.check_box_7.checked and not self.check_box_9.checked and not self.check_box_12.checked:
+      self.invisible()
+      self.warning_message()
+      self.check_box_5.checked = False
+    elif self.check_box_5.checked and self.check_box_9.checked and self.check_box_7.checked and self.check_box_12:
+      print("7 & 9 & 12 SELECTED")
+    elif self.check_box_5.checked and self.check_box_9.checked and self.check_box_7.checked:
+      print("7 & 9 SELECTED")
+    elif self.check_box_5.checked and self.check_box_9.checked and self.check_box_12.checked:
+      print("9 & 12 SELECTED")
+    elif self.check_box_5.checked and self.check_box_7.checked and self.check_box_12.checked:
+      print("7 & 12 SELECTED")
+    elif self.check_box_5.checked and self.check_box_7.checked:
+      self.invisible()
+      self.street.visible = True
+    elif self.check_box_5.checked and self.check_box_9.checked:
+      self.invisible()
+      self.river.visible = True
+    elif self.check_box_5.checked and self.check_box_12.checked:
+      self.invisible()
+      self.home.visible = True
+    else:
+      self.disable_warning_message()
+      self.invisible()
+    pass
+    
+
+  def check_box_6_change(self, **event_args):
+    if not self.check_box_7.checked and not self.check_box_9.checked and not self.check_box_12.checked:
+      self.invisible()
+      self.warning_message()
+      self.check_box_6.checked = False
+    elif self.check_box_6.checked and self.check_box_9.checked and self.check_box_7.checked and self.check_box_12:
+      print("7 & 9 & 12 SELECTED")
+    elif self.check_box_6.checked and self.check_box_9.checked and self.check_box_7.checked:
+      print("7 & 9 SELECTED")
+    elif self.check_box_6.checked and self.check_box_9.checked and self.check_box_12.checked:
+      print("9 & 12 SELECTED")
+    elif self.check_box_6.checked and self.check_box_7.checked and self.check_box_12.checked:
+      print("7 & 12 SELECTED")
+    elif self.check_box_6.checked and self.check_box_7.checked:
+      self.invisible()
+      self.street.visible = True
+    elif self.check_box_6.checked and self.check_box_9.checked:
+      self.invisible()
+      self.river.visible = True
+    elif self.check_box_6.checked and self.check_box_12.checked:
+      self.invisible()
+      self.home.visible = True
+    else:
+      self.disable_warning_message()
+      self.invisible()
+    pass
+
+  def check_box_8_change(self, **event_args):
+    if not self.check_box_7.checked and not self.check_box_9.checked and not self.check_box_12.checked:
+      self.invisible()
+      self.warning_message()
+      self.check_box_8.checked = False
+    elif self.check_box_8.checked and self.check_box_9.checked and self.check_box_7.checked and self.check_box_12:
+      print("7 & 9 & 12 SELECTED")
+    elif self.check_box_8.checked and self.check_box_9.checked and self.check_box_7.checked:
+      print("7 & 9 SELECTED")
+    elif self.check_box_8.checked and self.check_box_9.checked and self.check_box_12.checked:
+      print("9 & 12 SELECTED")
+    elif self.check_box_8.checked and self.check_box_7.checked and self.check_box_12.checked:
+      print("7 & 12 SELECTED")
+    elif self.check_box_8.checked and self.check_box_7.checked:
+      self.invisible()
+      self.street.visible = True
+    elif self.check_box_8.checked and self.check_box_9.checked:
+      self.invisible()
+      self.river.visible = True
+    elif self.check_box_8.checked and self.check_box_12.checked:
+      self.invisible()
+      self.home.visible = True
+    else:
+      self.disable_warning_message()
+      self.invisible()
+    pass
+
+  def check_box_10_change(self, **event_args):
+    if not self.check_box_7.checked and not self.check_box_9.checked and not self.check_box_12.checked:
+      self.invisible()
+      self.warning_message()
+      self.check_box_10.checked = False
+    elif self.check_box_10.checked and self.check_box_9.checked and self.check_box_7.checked and self.check_box_12:
+      print("7 & 9 & 12 SELECTED")
+    elif self.check_box_10.checked and self.check_box_9.checked and self.check_box_7.checked:
+      print("7 & 9 SELECTED")
+    elif self.check_box_10.checked and self.check_box_9.checked and self.check_box_12.checked:
+      print("9 & 12 SELECTED")
+    elif self.check_box_10.checked and self.check_box_7.checked and self.check_box_12.checked:
+      print("7 & 12 SELECTED")
+    elif self.check_box_10.checked and self.check_box_7.checked:
+      self.invisible()
+      self.street.visible = True
+    elif self.check_box_10.checked and self.check_box_9.checked:
+      self.invisible()
+      self.river.visible = True
+    elif self.check_box_10.checked and self.check_box_12.checked:
+      self.invisible()
+      self.home.visible = True
+    else:
+      self.disable_warning_message()
+      self.invisible()
+    pass
+
+  def check_box_11_change(self, **event_args):
+    if not self.check_box_7.checked and not self.check_box_9.checked and not self.check_box_12.checked:
+      self.invisible()
+      self.warning_message()
+      self.check_box_11.checked = False
+    elif self.check_box_11.checked and self.check_box_9.checked and self.check_box_7.checked and self.check_box_12:
+      print("7 & 9 & 12 SELECTED")
+    elif self.check_box_11.checked and self.check_box_9.checked and self.check_box_7.checked:
+      print("7 & 9 SELECTED")
+    elif self.check_box_11.checked and self.check_box_9.checked and self.check_box_12.checked:
+      print("9 & 12 SELECTED")
+    elif self.check_box_11.checked and self.check_box_7.checked and self.check_box_12.checked:
+      print("7 & 12 SELECTED")
+    elif self.check_box_11.checked and self.check_box_7.checked:
+      self.invisible()
+      self.street.visible = True
+    elif self.check_box_11.checked and self.check_box_9.checked:
+      self.invisible()
+      self.river.visible = True
+    elif self.check_box_11.checked and self.check_box_12.checked:
+      self.invisible()
+      self.home.visible = True
+    else:
+      self.disable_warning_message()
+      self.invisible()
+    pass
+
+  def check_box_13_change(self, **event_args):
+    if not self.check_box_7.checked and not self.check_box_9.checked and not self.check_box_12.checked:
+      self.invisible()
+      self.warning_message()
+      self.check_box_13.checked = False
+    elif self.check_box_13.checked and self.check_box_9.checked and self.check_box_7.checked and self.check_box_12:
+      print("7 & 9 & 12 SELECTED")
+    elif self.check_box_13.checked and self.check_box_9.checked and self.check_box_7.checked:
+      print("7 & 9 SELECTED")
+    elif self.check_box_13.checked and self.check_box_9.checked and self.check_box_12.checked:
+      print("9 & 12 SELECTED")
+    elif self.check_box_13.checked and self.check_box_7.checked and self.check_box_12.checked:
+      print("7 & 12 SELECTED")
+    elif self.check_box_13.checked and self.check_box_7.checked:
+      self.invisible()
+      self.street.visible = True
+    elif self.check_box_13.checked and self.check_box_9.checked:
+      self.invisible()
+      self.river.visible = True
+    elif self.check_box_13.checked and self.check_box_12.checked:
+      self.invisible()
+      self.home.visible = True
+    else:
+      self.disable_warning_message()
+      self.invisible()
+    pass
+
+  def check_box_14_change(self, **event_args):
+    if not self.check_box_7.checked and not self.check_box_9.checked and not self.check_box_12.checked:
+      self.invisible()
+      self.warning_message()
+      self.check_box_14.checked = False
+    elif self.check_box_14.checked and self.check_box_9.checked and self.check_box_7.checked and self.check_box_12:
+      print("7 & 9 & 12 SELECTED")
+    elif self.check_box_14.checked and self.check_box_9.checked and self.check_box_7.checked:
+      print("7 & 9 SELECTED")
+    elif self.check_box_14.checked and self.check_box_9.checked and self.check_box_12.checked:
+      print("9 & 12 SELECTED")
+    elif self.check_box_14.checked and self.check_box_7.checked and self.check_box_12.checked:
+      print("7 & 12 SELECTED")
+    elif self.check_box_14.checked and self.check_box_7.checked:
+      self.invisible()
+      self.street.visible = True
+    elif self.check_box_14.checked and self.check_box_9.checked:
+      self.invisible()
+      self.river.visible = True
+    elif self.check_box_14.checked and self.check_box_12.checked:
+      self.invisible()
+      self.home.visible = True
+    else:
+      self.disable_warning_message()
+      self.invisible()
+    pass
+
+  def check_box_15_change(self, **event_args):
+    if not self.check_box_7.checked and not self.check_box_9.checked and not self.check_box_12.checked:
+      self.invisible()
+      self.warning_message()
+      self.check_box_15.checked = False
+    elif self.check_box_15.checked and self.check_box_9.checked and self.check_box_7.checked and self.check_box_12:
+      print("7 & 9 & 12 SELECTED")
+    elif self.check_box_15.checked and self.check_box_9.checked and self.check_box_7.checked:
+      print("7 & 9 SELECTED")
+    elif self.check_box_15.checked and self.check_box_9.checked and self.check_box_12.checked:
+      print("9 & 12 SELECTED")
+    elif self.check_box_15.checked and self.check_box_7.checked and self.check_box_12.checked:
+      print("7 & 12 SELECTED")
+    elif self.check_box_15.checked and self.check_box_7.checked:
+      self.invisible()
+      self.street.visible = True
+    elif self.check_box_15.checked and self.check_box_9.checked:
+      self.invisible()
+      self.river.visible = True
+    elif self.check_box_15.checked and self.check_box_12.checked:
+      self.invisible()
+      self.home.visible = True
+    else:
+      self.disable_warning_message()
+      self.invisible()
+    pass
+
+
+  def primary_color_1_click(self, **event_args):
+    if self.bool_flag:
+      self.label_3.visible=True
+      self.bool_flag = False
+    else:
+      self.label_3.visible=False
+      self.bool_flag = True
+    pass
+
+  def button_2_click(self, **event_args):
+    if self.explain_flag:  
+      self.explain_msg.visible = True
+      self.explain_flag = False
+    else:
+      self.explain_flag = True
+      self.explain_msg.visible = False
+
+  def primary_color_2_click(self, **event_args):
+    if self.bool_link:
+      self.link_1.visible = True
+      self.bool_link = False
+    else:
+        self.link_1.visible = False
+        self.bool_link = True
+    pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+#   def drop_down_5_change(self, **event_args):
+#     self.disable_warning_message()
+#     if self.drop_down_5.selected_value == 'Select Month':
+#       self.warning_message()    
+#       self.drop_down_4.selected_value = 'Select Crime Type'
+#     elif self.drop_down_5.selected_value == 'January':
+#       self.month_val = 'J'
+#     elif self.drop_down_5.selected_value == 'February':        
+#       self.month_val = 'F'
+#     elif self.drop_down_5.selected_value == 'March':
+#       self.month_val = 'M'
+#     self.drop_down_4.selected_value = 'Select Crime Type'
+
+
+
+
+
+
+
+
+
+
+#   def drop_down_1_change(self, **event_args):
+#     self.drop_down_2.selected_value = 'February Crime Types'
+#     self.drop_down_3.selected_value = 'March Crime Types'
+#     if self.drop_down_1.selected_value == 'January Crime Types':
+#       self.invisible()
+#       print('DESELECT')
+#     elif self.drop_down_1.selected_value == 'January(R)':
+#       print('RED')
+#     elif self.drop_down_1.selected_value == 'January(G)':
+#       print('GREEN')
+#     elif self.drop_down_1.selected_value == 'January(B)':
+#       print('BLUE')
+#     elif self.drop_down_1.selected_value == 'January(RG)':
+#       print('RED GREEN')
+#     elif self.drop_down_1.selected_value == 'January(RB)':
+#       print('RED BLUE')
+#     elif self.drop_down_1.selected_value == 'January(GB)':
+#       print('GREEN BLUE')
+#     else:
+#         print('RED GREEN BLUE')
+      
+#   def drop_down_2_change(self, **event_args):
+#     self.drop_down_1.selected_value = 'January Crime Types'
+#     self.drop_down_3.selected_value = 'March Crime Types'
+    
+#     if self.drop_down_2.selected_value == 'February Crime Types':
+#       self.invisible()
+#       print('DESELECT')
+#     elif self.drop_down_2.selected_value == 'February(R)':
+#       print('RED')
+#     elif self.drop_down_2.selected_value == 'February(G)':
+#       print('GREEN')
+#     elif self.drop_down_2.selected_value == 'February(B)':
+#       print('BLUE')
+#     elif self.drop_down_2.selected_value == 'February(RG)':
+#       print('RED GREEN')
+#     elif self.drop_down_2.selected_value == 'February(RB)':
+#       print('RED BLUE')
+#     elif self.drop_down_2.selected_value == 'February(GB)':
+#       print('GREEN BLUE')
+#     else:
+#         print('RED GREEN BLUE')
+    
+#   def drop_down_3_change(self, **event_args):
+#     self.drop_down_1.selected_value = 'January Crime Types'
+#     self.drop_down_2.selected_value = 'February Crime Types'
+#     if self.drop_down_3.selected_value == 'March Crime Types':
+#       self.invisible()
+#       print('DESELECT')
+#     elif self.drop_down_3.selected_value == 'March(R)':
+#       print('RED')
+#     elif self.drop_down_3.selected_value == 'March(G)':
+#       print('GREEN')
+#     elif self.drop_down_3.selected_value == 'March(B)':
+#       print('BLUE')
+#     elif self.drop_down_3.selected_value == 'March(RG)':
+#       print('RED GREEN')
+#     elif self.drop_down_3.selected_value == 'March(RB)':
+#       print('RED BLUE')
+#     elif self.drop_down_3.selected_value == 'March(GB)':
+#       print('GREEN BLUE')
+#     else:
+#         print('RED GREEN BLUE')
+
+#   def button_1_click(self, **event_args):
+#     if self.drop_down_1.selected_value == 'January (R)':
+#       self.invisible()
+#       self.street.visible = True
+#     elif self.drop_down_1.selected_value == 'January (G)':
+#       self.invisible()
+#       self.street.visible = True
+#     elif self.drop_down_1.selected_value == 'January (B)':
+#       self.invisible()
+#       self.street.visible = True
+#     elif self.drop_down_1.selected_value == 'January (RG)':
+#       self.invisible()
+#       self.street.visible = True
+#     elif self.drop_down_1.selected_value == 'January (RB)':
+#       self.invisible()
+#       self.street.visible = True
+#     elif self.drop_down_1.selected_value == 'January (GB)':
+#       self.invisible()
+#       self.street.visible = True
+
+
+
+
+
+
+#   def date_picker_1_show(self, **event_args):
+#     """This method is called when the DatePicker is shown on the screen"""
+#     pass
+
+#   def date_picker_1_change(self, **event_args):
+#     self.disable_warning_message()
+#     print(self.date_picker_1.date)
+#     text = str(self.date_picker_1.date)
+#     if '2021-01' in text:
+#       print('JAN')
+#       self.month_val = 'J'
+#     elif '2021-02' in text:
+#       print('FEB')
+#       self.month_val = 'F'
+#     elif '2021-03' in text:
+#       print('MARCH')
+#       self.month_val = 'M'
+#     else:
+#       print('NOT A VALID DATE')
+#     self.drop_down_4.selected_value = 'Select Crime Type'
+#     pass
+
+#   def drop_down_4_change(self, **event_args):
+#     if self.month_val =='' or  self.drop_down_5.selected_value == 'Select Month':
+#         self.drop_down_4.selected_value = 'Select Crime Type'
+#         self.warning_message()
+#     if self.drop_down_4.selected_value == 'R' and self.month_val == 'J':
+#       print('JAN R')
+#     elif self.drop_down_4.selected_value == 'G' and self.month_val == 'J':
+#       print('JAN G')
+#     elif self.drop_down_4.selected_value == 'B' and self.month_val == 'J':
+#       print('JAN B')
+#     elif self.drop_down_4.selected_value == 'RG' and self.month_val == 'J':
+#       print('JAN RG')    
+#     elif self.drop_down_4.selected_value == 'RB' and self.month_val == 'J':
+#       print('JAN RB')
+#     elif self.drop_down_4.selected_value == 'GB' and self.month_val == 'J':
+#       print('JAN GB')      
+#     elif self.drop_down_4.selected_value == 'R' and self.month_val == 'F':
+#       print('FEB R')    
+#     elif self.drop_down_4.selected_value == 'G' and self.month_val == 'F':
+#       print('FEB G')
+#     elif self.drop_down_4.selected_value == 'B' and self.month_val == 'F':
+#       print('FEB B')
+#     elif self.drop_down_4.selected_value == 'RG' and self.month_val == 'F':
+#       print('FEB RG')    
+#     elif self.drop_down_4.selected_value == 'RB' and self.month_val == 'F':
+#       print('FEB RB')
+#     elif self.drop_down_4.selected_value == 'GB' and self.month_val == 'F':
+#       print('FEB GB')  
+#     elif self.drop_down_4.selected_value == 'R' and self.month_val == 'M':
+#       print('MAR R')    
+#     elif self.drop_down_4.selected_value == 'G' and self.month_val == 'M':
+#       print('MAR G')
+#     elif self.drop_down_4.selected_value == 'B' and self.month_val == 'M':
+#       print('MAR B')
+#     elif self.drop_down_4.selected_value == 'RG' and self.month_val == 'M':
+#       print('MAR RG')    
+#     elif self.drop_down_4.selected_value == 'RB' and self.month_val == 'M':
+#       print('MAR RB')
+#     elif self.drop_down_4.selected_value == 'GB' and self.month_val == 'M':
+#       print('MAR GB')  
+#     pass
+
+
+
+
