@@ -7,10 +7,12 @@ The GAN model makes a prediction based off of the inputs it was trained on. The 
 
 The webapp allows the user to select between any of the three crimes across any of the twelve months. The combinations are computed live through a remote server function in Google Collab. 
 
-To better understand the output, a helpful guide is displayed below:
+# Understanding the output
 
 
 RED: Violent/Other Crimes
+![jan21assault](https://user-images.githubusercontent.com/29829945/182502368-276e4dff-6b42-4198-90cf-977fe02fbfdf.jpg)
+
 BLUE: Theft
 Green: Assault
 
