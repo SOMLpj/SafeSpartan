@@ -15,3 +15,6 @@ BLUE: Theft
 Green: Assault
 
 The brightness of the color represents the frequency of the crime. For example, predicted outputs often show little to now red squares. This means there are few violent crimes on campus. 
+
+
+Report: https://docs.google.com/document/d/18FzZny6VXcsMVf4wMmMWe3eoieKea6krHSk29qvhUCA/edit?usp=sharing
