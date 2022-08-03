@@ -1,7 +1,7 @@
 # SafeSpartan
 Senior Project SJSU SUMMER 2022
 
-Safe Spartan is a machine learning based project that predicts crime (frequency & type) on San Jose State University Campus. This is accomplished by first training a GAN model on crimes in the city of San Francisco. The training took place for January through December 2021. Each month was trained three times with three different crimes (Theft, Assault, Violent/Other).  
+Safe Spartan is a machine learning based project that predicts crime (frequency & type) on San Jose State University Campus. This is accomplished by first training a GAN model on crimes in the city of San Francisco. The training took place for January through December 2021. Each month was trained three times with three different crimes: Theft, Assault, Violent/Other (where Other represents homicide, rape, and missing persons on campus).  
 
 The GAN model makes a prediction based off of the inputs it was trained on. The predicted outputs are displayed on a web application to promote user interaction and to increase the usefulness of the project itself.  
 
