@@ -18,7 +18,7 @@ RED: Violent/Other Crimes
 BLUE: Theft  
 Green: Assault  
 
-The brightness of the color represents the frequency of the crime. For example, predicted outputs often show little to no red squares. This means there are few violent crimes on campus. A dark blue colored square however, represents high frequency theft.
+The brightness of the color represents the frequency of the crime. For example, predicted outputs often show little to no red squares. This means there are few violent crimes on campus. A dark green colored square however, represents a high frequency assaults.
 
 Below is an overlay of January Theft and SJSU campus
 
