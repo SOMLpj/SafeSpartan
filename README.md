@@ -20,9 +20,8 @@ Green: Assault
 
 The brightness of the color represents the frequency of the crime. For example, predicted outputs often show little to no red squares. This means there are few violent crimes on campus. A dark green colored square however, represents a high frequency assaults.
 
-Below is an overlay of January Theft and SJSU campus
-
-`IMAGE HERE`
+Below is an overlay of March, May, and July assault around campus.
+![image](https://user-images.githubusercontent.com/52023760/183222739-4c0295c2-1c19-4a76-82e1-0ff9c75e9b55.png)
 
 
 Report: https://docs.google.com/document/d/18FzZny6VXcsMVf4wMmMWe3eoieKea6krHSk29qvhUCA/edit?usp=sharing
