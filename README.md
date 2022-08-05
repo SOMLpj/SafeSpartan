@@ -28,8 +28,7 @@ Below is an overlay of January Theft and SJSU campus
 Report: https://docs.google.com/document/d/18FzZny6VXcsMVf4wMmMWe3eoieKea6krHSk29qvhUCA/edit?usp=sharing
 
 # 1. Setting up Google Collab
-First, you will need to make a copy of the google collab
-https://colab.research.google.com/drive/1ZfMaTHpJIlS5tmKq2Vk4sNsw48_3ZTcS?usp=sharing
+First, you will need to make a copy of the [google collab](https://colab.research.google.com/drive/1ZfMaTHpJIlS5tmKq2Vk4sNsw48_3ZTcS?usp=sharing).
 Once you have a copy, you will need to provide training data and adjust the path to your directory accordingly.
 For our project, we used a shared google drive to host the file. The collab instance will be able to sign in and view the files.
 
